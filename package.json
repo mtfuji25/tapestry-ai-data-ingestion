@@ -1,0 +1,30 @@
+{
+    "name": "tapestry-ai-data-ingestion",
+    "version": "1.0.0",
+    "description": "A production-grade data ingestion service for public domain metadata sources using TypeScript and proxy-ready architecture.",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "build": "tsc",
+        "start": "node dist/index.js"
+    },
+    "author": "darkty0x",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.3.0",
+        "cheerio": "^1.0.0-rc.12",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "pg": "^8.9.0",
+        "puppeteer-extra": "^3.3.6",
+        "puppeteer-extra-plugin-proxy": "^1.0.2",
+        "puppeteer-extra-plugin-stealth": "^2.11.2"
+    },
+    "devDependencies": {
+        "@types/cheerio": "^0.22.30",
+        "@types/express": "^4.17.17",
+        "@types/node": "^18.16.3",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.0.4"
+    }
+}
