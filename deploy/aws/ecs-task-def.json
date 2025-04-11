@@ -1,0 +1,60 @@
+{
+    "family": "tapestry-ai-data-ingestion-task",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024",
+    "containerDefinitions": [
+        {
+            "name": "tapestry-ai-data-ingestion",
+            "image": "<AWS_ECR_REGISTRY>/tapestry-ai-data-ingestion:<IMAGE_TAG>",
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "NODE_ENV",
+                    "value": "production"
+                },
+                {
+                    "name": "PORT",
+                    "value": "3000"
+                },
+                {
+                    "name": "DB_HOST",
+                    "value": "<your-db-host>"
+                },
+                {
+                    "name": "DB_PORT",
+                    "value": "5432"
+                },
+                {
+                    "name": "DB_USER",
+                    "value": "<your-db-user>"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "value": "<your-db-password>"
+                },
+                {
+                    "name": "DB_NAME",
+                    "value": "<your-db-name>"
+                },
+                {
+                    "name": "AWS_REGION",
+                    "value": "<aws-region>"
+                },
+                {
+                    "name": "PROXY_URL",
+                    "value": "<proxy-url-if-needed>"
+                }
+            ]
+        }
+    ]
+}

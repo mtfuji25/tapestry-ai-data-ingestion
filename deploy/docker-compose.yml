@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  tapestry-ai-data-ingestion:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - AWS_REGION=${AWS_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - PROXY_URL=${PROXY_URL}
+    ports:
+      - "3000:3000"

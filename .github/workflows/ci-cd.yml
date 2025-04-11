@@ -1,0 +1,56 @@
+# .github/workflows/ci-cd.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests and build
+        run: npm run build
+
+      # Docker build and push steps
+      - name: Log in to Amazon ECR
+        id: ecr-login
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        run: |
+          IMAGE_TAG=${{ github.sha }}
+          docker build -t $IMAGE_TAG -f deploy/Dockerfile .
+          
+      - name: Tag and push Docker image to ECR
+        env:
+          ECR_REGISTRY: ${{ secrets.AWS_ECR_REGISTRY }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag $IMAGE_TAG $ECR_REGISTRY/tapestry-ai-data-ingestion:$IMAGE_TAG
+          docker push $ECR_REGISTRY/tapestry-ai-data-ingestion:$IMAGE_TAG
+
+      # Optional: Deploy to ECS using an ECS service updated by CodeDeploy
+      - name: Deploy to ECS/Fargate
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: deploy/aws/ecs-task-def.json
+          service: ${{ secrets.AWS_ECS_SERVICE }}
+          cluster: ${{ secrets.AWS_ECS_CLUSTER }}
+          wait-for-service-stability: true
